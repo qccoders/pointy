@@ -1,0 +1,66 @@
+#!/bin/bash
+set -e
+
+client_only=false
+server_only=false
+
+while test $# -gt 0; do
+  case "$1" in
+    -h|--help)
+      echo 'options:'
+      echo '-h, --help          show help'
+      echo '--client-only       skip server build'
+      echo '--server-only       skip client build'
+      exit 0
+      ;;
+    --client-only)
+      client_only=true
+      shift
+      ;;
+    --server-only)
+      server_only=true
+      shift
+      ;;
+    *)
+      break
+      ;;
+  esac
+done
+
+if [ "$server_only" == true ]; then
+  echo $'\n\t⏩  client build skipped\n'
+else
+  echo $'\n🧹  rm -rf dist\n'
+  rm -rf dist
+
+  cd src/client
+  echo $'\n📍 '$(pwd)$'\n'
+
+  echo $'\n🛠️  npm install\n'
+  npm install
+
+  echo $'\n🛠️  npm run build\n'
+  npm run build
+
+  echo $'\n🛠️  npm run export:dist\n'
+  npm run export:dist
+
+  cd ../..
+fi
+
+if [ "$client_only" == true ]; then
+  echo $'\n\t⏩  server build skipped\n'
+else
+  cd src/server
+  echo $'\n📍 '$(pwd)$'\n'
+
+  echo $'\n🛠️  npm install\n'
+  npm install
+
+  echo $'\n🛠️  cp -r . ../../dist\n'
+  cp -r . ../../dist
+
+  cd ../..
+fi
+
+echo $'\n🎉  build succeded!\n'
