@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const cors = require('cors');
 
@@ -6,9 +7,7 @@ const { POINTY_PORT = 3000 } = process.env;
 const app = express();
 app.use(cors());
 
-app.get('/', (req, res) => {
-  res.status(200).send('hello, world!');
-});
+app.use('/', express.static(path.join(__dirname, 'static')))
 
 const router = express.Router();
 app.use('/api', router);

@@ -1,0 +1,11 @@
+{
+  "name": "pointy",
+  "version": "1.0.0",
+  "description": "A real-time 'pointing poker' app!",
+  "scripts": {
+    "build": "./bin/build",
+    "start": "./bin/build && ./bin/start"
+  },
+  "author": "QC Coders",
+  "license": "MIT"
+}
